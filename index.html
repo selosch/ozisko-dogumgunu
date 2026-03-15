@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ozişko için ❤️</title>
     <style>
-        /* Google Fonts'tan Şık Yazı Tipleri */
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Oswald:wght@500&display=swap');
 
         body {
@@ -15,6 +14,8 @@
             text-align: center;
             color: white;
             background: #f6c1cc;
+            /* ÖZEL İMLEÇ: Bilgisayarda fareyi kalp yapar */
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23ff4f87" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'), auto;
         }
 
         .screen {
@@ -27,46 +28,34 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: opacity 0.5s ease;
+            opacity: 0; /* Başlangıçta görünmez */
+            pointer-events: none;
+            transition: opacity 1s ease-in-out; /* SİNEMATİK GEÇİŞ */
         }
 
-        #loading { background: #f6c1cc; z-index: 100; }
+        .active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #loading { background: #f6c1cc; z-index: 100; opacity: 1; pointer-events: auto; }
         .loader-heart { font-size: 80px; animation: pulse 1s infinite; margin-bottom: 20px; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
 
         #welcome { z-index: 50; }
-        #intro { z-index: 40; opacity: 0; pointer-events: none; }
+        #intro { z-index: 40; }
         #intro img { width: 280px; margin-bottom: 20px; max-width: 80%; }
 
-        #celebration {
-            z-index: 35;
-            opacity: 0;
-            pointer-events: none;
-            background: #f6c1cc;
-        }
-        .pop-in {
-            width: 280px;
-            max-width: 80%;
-            margin-bottom: 30px;
-            transform: scale(0);
-            animation: popInAnim 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-        @keyframes popInAnim {
-            0% { transform: scale(0); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
+        #celebration { z-index: 35; background: #f6c1cc; }
+        .pop-in { width: 280px; max-width: 80%; margin-bottom: 30px; transform: scale(0); animation: popInAnim 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes popInAnim { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
-        /* YENİ: OKYANUS ARKA PLANI */
         #underwater {
             z-index: 30;
-            opacity: 0;
-            pointer-events: none;
-            /* Görseldeki gibi lacivertten okyanus yeşiline geçiş */
             background: linear-gradient(180deg, #102538 0%, #1a5163 50%, #207178 100%);
             overflow: hidden;
         }
         
-        /* Okyanus Işığı Efekti */
         #underwater::before {
             content: "";
             position: absolute;
@@ -76,121 +65,55 @@
             animation: waterLight 8s linear infinite alternate; 
             pointer-events: none;
         }
-        @keyframes waterLight {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(5%); }
-        }
 
-        .final-image { 
-            width: 90%; 
-            max-width: 300px; 
-            margin-bottom: 10px; 
-            z-index: 3; 
-            position: relative;
-            animation: float 4s ease-in-out infinite;
-        }
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
-        }
+        .final-image { width: 90%; max-width: 300px; margin-bottom: 10px; z-index: 3; position: relative; animation: float 4s ease-in-out infinite; }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
 
-        /* YENİ: HAPPY BIRTHDAY YAZISI */
-        .bday-title {
-            z-index: 3;
-            margin-bottom: 15px;
-            line-height: 1;
-        }
-        .bday-title .happy {
-            font-family: 'Dancing Script', cursive;
-            font-size: 45px;
-            color: #ffffff;
-            font-weight: normal;
-        }
-        .bday-title .bday {
-            font-family: 'Oswald', sans-serif;
-            font-size: 50px;
-            color: #e2f1f8;
-            letter-spacing: 3px;
-        }
+        .bday-title { z-index: 3; margin-bottom: 15px; line-height: 1; }
+        .bday-title .happy { font-family: 'Dancing Script', cursive; font-size: 45px; color: #ffffff; }
+        .bday-title .bday { font-family: 'Oswald', sans-serif; font-size: 50px; color: #e2f1f8; letter-spacing: 3px; }
 
-        /* YENİ: YAZI İÇİN CAM PANEL EFEKTİ */
         .text { 
             max-width: 650px; 
             width: 90%; 
             margin: auto; 
             padding: 20px; 
-            font-size: 16px; 
+            font-size: 17px; 
             line-height: 1.6; 
-            /* Görseldeki gibi şeffaf gri/mavi kutu */
             background: rgba(20, 45, 60, 0.6); 
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 15px; 
             backdrop-filter: blur(8px); 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             z-index: 3; 
+            min-height: 150px; /* Daktilo sırasında boyutu koruması için */
         }
 
-        .button-container { display: flex; justify-content: center; align-items: center; gap: 20px; height: 100px; }
-
         button { padding: 15px 35px; font-size: 20px; border: none; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.2s, background 0.3s; }
-        button:active { transform: scale(0.95); }
-        
         #enter, #yes, #knewItBtn, #thenBtn { background: #ff4f87; color: white; font-weight: bold; margin-top: 10px; }
-        #enter:hover, #yes:hover, #knewItBtn:hover, #thenBtn:hover { background: #ff2a6d; }
         #no { background: #555; color: white; position: relative; transition: left 0.3s ease, top 0.3s ease; }
 
         .heart { position: absolute; font-size: 24px; pointer-events: none; animation: floatHeart 1s ease-out forwards; z-index: 999; }
         @keyframes floatHeart { 0% { transform: scale(0.5) translateY(0); opacity: 1; } 100% { transform: scale(1.5) translateY(-50px); opacity: 0; } }
 
-        .confetti {
-            position: absolute;
-            top: -10px;
-            width: 10px;
-            height: 10px;
-            z-index: 1000;
-            animation: fallConfetti linear forwards;
-        }
-        @keyframes fallConfetti {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-        }
+        .confetti { position: absolute; top: -10px; width: 10px; height: 10px; z-index: 1000; animation: fallConfetti linear forwards; }
+        @keyframes fallConfetti { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
 
-        /* YENİ: GERÇEKÇİ BALONCUKLAR */
         .bubble { 
             position: absolute; 
             bottom: -100px; 
             border-radius: 50%; 
             border: 2px solid rgba(255, 255, 255, 0.5);
             background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.05) 60%);
-            box-shadow: inset 0 0 10px rgba(255,255,255,0.3);
             animation: bubbleUp linear infinite; 
-            pointer-events: none; 
             z-index: 1; 
         }
-        @keyframes bubbleUp { 
-            0% { transform: translateY(0) scale(1) translateX(0); opacity: 0; } 
-            10% { opacity: 1; }
-            50% { transform: translateY(-50vh) scale(1.1) translateX(20px); }
-            100% { transform: translateY(-120vh) scale(1.3) translateX(-20px); opacity: 0; } 
-        }
+        @keyframes bubbleUp { 0% { transform: translateY(0) scale(1); opacity: 0; } 10% { opacity: 1; } 100% { transform: translateY(-120vh) scale(1.3); opacity: 0; } }
 
-        /* YENİ: PARLAYAN YILDIZLAR */
-        .star {
-            position: absolute;
-            background: #ffe359;
-            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-            animation: twinkle alternate infinite;
-            z-index: 2;
-        }
-        @keyframes twinkle {
-            0% { transform: scale(0.8) rotate(0deg); opacity: 0.5; box-shadow: 0 0 10px #ffe359; }
-            100% { transform: scale(1.2) rotate(15deg); opacity: 1; box-shadow: 0 0 20px #ffe359, 0 0 40px #ffe359; }
-        }
+        .star { position: absolute; background: #ffe359; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); animation: twinkle alternate infinite; z-index: 2; }
+        @keyframes twinkle { 0% { transform: scale(0.8); opacity: 0.5; } 100% { transform: scale(1.2); opacity: 1; } }
 
         .music { position: fixed; top: 20px; right: 20px; z-index: 1000; }
-        .music button { padding: 10px 20px; font-size: 16px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(5px); color: white; border: 1px solid rgba(255,255,255,0.4); border-radius: 20px; cursor: pointer; transition: 0.3s;}
-        .music button:hover { background: rgba(255, 255, 255, 0.4); }
+        .music button { padding: 10px 20px; font-size: 16px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(5px); color: white; border: 1px solid rgba(255,255,255,0.4); border-radius: 20px; }
     </style>
 </head>
 <body>
@@ -203,7 +126,7 @@
         <source src="ozi.mp3" type="audio/mpeg">
     </audio>
 
-    <div id="loading" class="screen">
+    <div id="loading" class="screen active">
         <div class="loader-heart">❤️</div>
         <h2>Bu site Ozişko için hazırlanıyor…</h2>
     </div>
@@ -229,35 +152,26 @@
     </div>
 
     <div id="underwater" class="screen">
-        
         <div id="stars-container"></div>
-
         <img src="axolotl.png" alt="Doğum Günü Axolotl" class="final-image"> 
-        
         <div class="bday-title">
             <div class="happy">happy</div>
             <div class="bday">BIRTHDAY TO YOU!</div>
         </div>
-
-        <div class="text">
-            Hayatımda olduğun için ne kadar şanslı, ne kadar mutlu olduğumu kelimelerle anlatmak çok zor.
-            Seninle tanıştığımdan beri hayatımın rengi, gidişatı değişti. Gülüşün, bana bakışın, yanımda olduğunda hissettiğim huzur ve daha birçok şey… hepsi benim için çok özel ve çok değerli.
-            <br><br>
-            Yeni yaşın sana sağlık, mutluluk ve tüm hayallerini getirsin. Ama en çok da hep yanımda olmanı getirsin. <br><strong style="color: #ff4f87;">Doğum günün kutlu olsun aşkım. İyi ki varsın. ❤️</strong>
-        </div>
+        <div id="typewriterText" class="text"></div>
     </div>
 
     <script>
+        const fullMessage = "Hayatımda olduğun için ne kadar şanslı, ne kadar mutlu olduğumu kelimelerle anlatmak çok zor. Seninle tanıştığımdan beri hayatımın rengi, gidişatı değişti. Gülüşün, bana bakışın, yanımda olduğunda hissettiğim huzur ve daha birçok şey… hepsi benim için çok özel ve çok değerli. \n\n Yeni yaşın sana sağlık, mutluluk ve tüm hayallerini getirsin. Ama en çok da hep yanımda olmanı getirsin. \n\n Doğum günün kutlu olsun aşkım. İyi ki varsın. ❤️";
+
         function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(el => {
-                el.style.opacity = '0';
-                el.style.pointerEvents = 'none';
-            });
-            const activeScreen = document.getElementById(screenId);
-            activeScreen.style.opacity = '1';
-            activeScreen.style.pointerEvents = 'auto';
+            document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+            setTimeout(() => {
+                document.getElementById(screenId).classList.add('active');
+            }, 100);
         }
 
+        // Yükleme ekranı
         setTimeout(() => { showScreen('welcome'); }, 2500);
 
         document.getElementById("enter").onclick = () => { showScreen('intro'); };
@@ -271,12 +185,9 @@
             const maxY = window.innerHeight - noBtn.offsetHeight - 20;
             const randomX = Math.max(20, Math.random() * maxX);
             const randomY = Math.max(20, Math.random() * maxY);
-            
             noBtn.style.position = "fixed";
             noBtn.style.left = randomX + "px";
             noBtn.style.top = randomY + "px";
-            noBtn.style.transform = "none"; 
-            
             yesSize += 10;
             yesBtn.style.fontSize = yesSize + "px";
             yesBtn.style.padding = (yesSize/1.5) + "px " + (yesSize) + "px";
@@ -285,11 +196,6 @@
         yesBtn.onclick = () => {
             showScreen('celebration');
             fireConfetti();
-            
-            const loveImg = document.getElementById('loveImage');
-            loveImg.style.animation = 'none';
-            void loveImg.offsetWidth;
-            loveImg.style.animation = 'popInAnim 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
         };
 
         document.getElementById('knewItBtn').onclick = () => {
@@ -301,7 +207,20 @@
             showScreen('underwater');
             startBubbles();
             createStars();
+            // Daktilo efektini başlat
+            setTimeout(typeWriter, 1200); 
         };
+
+        // DAKTİLO FONKSİYONU
+        let i = 0;
+        function typeWriter() {
+            if (i < fullMessage.length) {
+                const char = fullMessage.charAt(i);
+                document.getElementById("typewriterText").innerHTML += char === "\n" ? "<br>" : char;
+                i++;
+                setTimeout(typeWriter, 40); // Yazma hızı (milisaniye)
+            }
+        }
 
         function fireConfetti() {
             const colors = ['#ff4f87', '#ff2a6d', '#ffffff', '#ffd700', '#ffb6c1'];
@@ -311,18 +230,12 @@
                 conf.style.left = Math.random() * 100 + 'vw';
                 conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                 conf.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                conf.style.animationDelay = (Math.random() * 0.5) + 's';
-                conf.style.width = (Math.random() * 10 + 5) + 'px';
-                conf.style.height = (Math.random() * 15 + 5) + 'px';
                 document.body.appendChild(conf);
                 setTimeout(() => conf.remove(), 5000); 
             }
         }
 
-        let heartCooldown = false;
         document.addEventListener("mousemove", (e) => {
-            if (heartCooldown) return;
-            heartCooldown = true;
             let heart = document.createElement("div");
             heart.className = "heart";
             heart.innerHTML = "❤️";
@@ -330,23 +243,19 @@
             heart.style.top = (e.pageY - 12) + "px";
             document.body.appendChild(heart);
             setTimeout(() => heart.remove(), 800);
-            setTimeout(() => heartCooldown = false, 25); 
         });
 
-        // YILDIZ OLUŞTURMA FONKSİYONU
         function createStars() {
             const container = document.getElementById("stars-container");
-            for(let i=0; i<15; i++) {
+            for(let i=0; i<20; i++) {
                 let star = document.createElement("div");
                 star.className = "star";
-                // Ekranda rastgele konumlara dağıt
-                star.style.left = (Math.random() * 90 + 5) + "vw";
-                star.style.top = (Math.random() * 60 + 5) + "vh";
-                // Farklı büyüklüklerde yıldızlar
-                let size = Math.random() * 20 + 10;
+                star.style.left = (Math.random() * 95) + "vw";
+                star.style.top = (Math.random() * 65) + "vh";
+                let size = Math.random() * 15 + 10;
                 star.style.width = size + "px";
                 star.style.height = size + "px";
-                star.style.animationDuration = (Math.random() * 1.5 + 1) + "s";
+                star.style.animationDuration = (Math.random() * 1 + 1) + "s";
                 container.appendChild(star);
             }
         }
@@ -355,22 +264,20 @@
             setInterval(() => {
                 let bubble = document.createElement("div");
                 bubble.className = "bubble";
-                // Baloncuk boyutları daha büyük ve çeşitli
-                let size = Math.random() * 40 + 20; 
+                let size = Math.random() * 30 + 15; 
                 bubble.style.width = size + "px";
                 bubble.style.height = size + "px";
                 bubble.style.left = Math.random() * 100 + "vw";
-                bubble.style.animationDuration = (Math.random() * 5 + 4) + "s";
+                bubble.style.animationDuration = (Math.random() * 4 + 4) + "s";
                 document.getElementById("underwater").appendChild(bubble);
-                setTimeout(() => bubble.remove(), 9000);
-            }, 300); // Baloncuk çıkma sıklığı
+                setTimeout(() => bubble.remove(), 8000);
+            }, 350);
         }
 
         let isPlaying = false;
         function playMusic() {
             const bgMusic = document.getElementById("bgMusic");
             const btn = document.getElementById("musicBtn");
-
             if (!isPlaying) {
                 bgMusic.play();
                 btn.innerHTML = "🎵 Müziği Durdur";
