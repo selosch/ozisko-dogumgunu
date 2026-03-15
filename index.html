@@ -14,11 +14,9 @@
             text-align: center;
             color: white;
             background: #f6c1cc;
-            /* ÖZEL İMLEÇ: Klasöründeki hearth.png dosyasını kullanır */
             cursor: url('hearth.png'), auto;
         }
 
-        /* Tıklanabilir her şeyde (butonlar gibi) imlecin kaybolmaması için */
         button, a {
             cursor: url('hearth.png'), pointer !important;
         }
@@ -71,12 +69,12 @@
             pointer-events: none;
         }
 
-        .final-image { width: 90%; max-width: 300px; margin-bottom: 10px; z-index: 3; position: relative; animation: float 4s ease-in-out infinite; }
+        .final-image { width: 90%; max-width: 280px; margin-bottom: 10px; z-index: 3; position: relative; animation: float 4s ease-in-out infinite; }
         @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
 
         .bday-title { z-index: 3; margin-bottom: 15px; line-height: 1; }
-        .bday-title .happy { font-family: 'Dancing Script', cursive; font-size: 45px; color: #ffffff; }
-        .bday-title .bday { font-family: 'Oswald', sans-serif; font-size: 50px; color: #e2f1f8; letter-spacing: 3px; }
+        .bday-title .happy { font-family: 'Dancing Script', cursive; font-size: 40px; color: #ffffff; }
+        .bday-title .bday { font-family: 'Oswald', sans-serif; font-size: 45px; color: #e2f1f8; letter-spacing: 2px; }
 
         .text { 
             max-width: 650px; 
@@ -90,10 +88,11 @@
             border-radius: 15px; 
             backdrop-filter: blur(8px); 
             z-index: 3; 
-            min-height: 150px; 
+            min-height: 180px;
+            text-align: left; /* Okuma kolaylığı için sola yasladım */
         }
 
-        button { padding: 15px 35px; font-size: 20px; border: none; border-radius: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.2s, background 0.3s; }
+        button { padding: 15px 35px; font-size: 20px; border: none; border-radius: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: 0.3s; }
         #enter, #yes, #knewItBtn, #thenBtn { background: #ff4f87; color: white; font-weight: bold; margin-top: 10px; }
         #no { background: #555; color: white; position: relative; transition: left 0.3s ease, top 0.3s ease; }
 
@@ -167,13 +166,17 @@
     </div>
 
     <script>
-        const fullMessage = "Hayatımda olduğun için ne kadar şanslı, ne kadar mutlu olduğumu kelimelerle anlatmak çok zor. Seninle tanıştığımdan beri hayatımın rengi, gidişatı değişti. Gülüşün, bana bakışın, yanımda olduğunda hissettiğim huzur ve daha birçok şey… hepsi benim için çok özel ve çok değerli. \n\n Yeni yaşın sana sağlık, mutluluk ve tüm hayallerini getirsin. Ama en çok da hep yanımda olmanı getirsin. \n\n Doğum günün kutlu olsun aşkım. İyi ki varsın. ❤️";
+        const fullMessage = "Hayatımda olduğun için ne kadar şanslı, ne kadar mutlu olduğumu kelimelerle anlatmak çok zor. Seninle tanıştığımdan beri hayatımın rengi, gidişatı değişti. Gülüşün, bana bakışın, yanımda olduğunda hissettiğim huzur ve daha birçok şey… hepsi benim için çok özel ve çok değerli. \n\n İyi ki doğmuşsun, iyi ki benim hayatıma girmişsin. Seninle daha paylaşacağımız çok güzel anılar, kahkahalar ve hayaller var. \n\n Yeni yaşın sana sağlık, mutluluk ve tüm hayallerini getirsin. Ama en çok da hep yanımda olmanı getirsin. \n\n Doğum günün kutlu olsun aşkım. İyi ki varsın. ❤️";
 
         function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
-            setTimeout(() => {
-                document.getElementById(screenId).classList.add('active');
-            }, 100);
+            const screens = document.querySelectorAll('.screen');
+            screens.forEach(s => {
+                s.classList.remove('active');
+            });
+            const target = document.getElementById(screenId);
+            if(target) {
+                target.classList.add('active');
+            }
         }
 
         setTimeout(() => { showScreen('welcome'); }, 2500);
@@ -211,22 +214,29 @@
             showScreen('underwater');
             startBubbles();
             createStars();
-            setTimeout(typeWriter, 1200); 
+            // Daktilo başlatma
+            i = 0;
+            document.getElementById("typewriterText").innerHTML = "";
+            setTimeout(typeWriter, 1500); 
         };
 
         let i = 0;
         function typeWriter() {
             if (i < fullMessage.length) {
-                const char = fullMessage.charAt(i);
-                document.getElementById("typewriterText").innerHTML += char === "\n" ? "<br>" : char;
+                let char = fullMessage.charAt(i);
+                if (char === "\n") {
+                    document.getElementById("typewriterText").innerHTML += "<br>";
+                } else {
+                    document.getElementById("typewriterText").innerHTML += char;
+                }
                 i++;
-                setTimeout(typeWriter, 40); 
+                setTimeout(typeWriter, 45); 
             }
         }
 
         function fireConfetti() {
             const colors = ['#ff4f87', '#ff2a6d', '#ffffff', '#ffd700', '#ffb6c1'];
-            for(let i=0; i<150; i++) {
+            for(let k=0; k<150; k++) {
                 let conf = document.createElement('div');
                 conf.className = 'confetti';
                 conf.style.left = Math.random() * 100 + 'vw';
@@ -249,7 +259,7 @@
 
         function createStars() {
             const container = document.getElementById("stars-container");
-            for(let i=0; i<20; i++) {
+            for(let j=0; j<25; j++) {
                 let star = document.createElement("div");
                 star.className = "star";
                 star.style.left = (Math.random() * 95) + "vw";
@@ -270,7 +280,7 @@
                 bubble.style.width = size + "px";
                 bubble.style.height = size + "px";
                 bubble.style.left = Math.random() * 100 + "vw";
-                bubble.style.animationDuration = (Math.random() * 4 + 4) + "s";
+                bubble.style.animationDuration = (Math.random() * 5 + 4) + "s";
                 document.getElementById("underwater").appendChild(bubble);
                 setTimeout(() => bubble.remove(), 8000);
             }, 350);
@@ -281,7 +291,7 @@
             const bgMusic = document.getElementById("bgMusic");
             const btn = document.getElementById("musicBtn");
             if (!isPlaying) {
-                bgMusic.play().catch(e => console.log("Müzik çalma hatası:", e));
+                bgMusic.play();
                 btn.innerHTML = "🎵 Müziği Durdur";
                 isPlaying = true;
             } else {
